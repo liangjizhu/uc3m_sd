@@ -24,132 +24,137 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
-#include <sys/stat.h>        /* For mode constants */
+#include <sys/stat.h> /* For mode constants */
 #include <mqueue.h>
 
 #include "lib-client.h"
 #include "lib-mesg.h"
 
-
-int d_send_receive ( struct message *pr )
+int d_send_receive(struct message *pr)
 {
-     int  ret ;
-     char qr_name[1024] ;
+     int ret;
+     char qr_name[1024];
      struct mq_attr attr;
-     int qs, qr ;
-     unsigned prio ;
+     int qs, qr;
+     unsigned prio;
 
      /* Initialize the queue attributes (attr) */
-     bzero(&attr, sizeof(struct mq_attr)) ;
-     attr.mq_flags   = 0 ;
-     attr.mq_maxmsg  = 10 ;
-     attr.mq_msgsize = sizeof(struct message) ;
-     attr.mq_curmsgs = 0 ;
+     bzero(&attr, sizeof(struct mq_attr));
+     attr.mq_flags = 0;
+     attr.mq_maxmsg = 10;
+     attr.mq_msgsize = sizeof(struct message);
+     attr.mq_curmsgs = 0;
 
-  // qs = mq_open("/SERVIDOR", O_WRONLY, 0700, &attr) ;
-     qs = mq_open("/SERVIDOR", O_WRONLY) ;
-     if (qs == -1) {
-	 perror("mq_open: ") ;
-	 return -1 ;
+     // qs = mq_open("/SERVIDOR", O_WRONLY, 0700, &attr) ;
+     qs = mq_open("/SERVIDOR", O_WRONLY);
+     if (qs == -1)
+     {
+          perror("mq_open: ");
+          return -1;
      }
 
-     sprintf(qr_name, "%s%d", "/CLIENTE_", getpid()) ;
-     qr = mq_open(qr_name, O_CREAT|O_RDONLY, 0664, &attr) ;
-     if (qr == -1) {
-	 perror("mq_open: ") ;
-	 mq_close(qs) ;
-	 return -1;
+     sprintf(qr_name, "%s%d", "/CLIENTE_", getpid());
+     qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0664, &attr);
+     if (qr == -1)
+     {
+          perror("mq_open: ");
+          mq_close(qs);
+          return -1;
      }
-     strcpy(pr->q_name, qr_name) ;
+     strcpy(pr->q_name, qr_name);
 
      // send request
-     ret = mq_send(qs,    (char *)pr, sizeof(struct message), 0) ;
-     if (ret < 0) {
-	 perror("mq_send: ") ;
-	 mq_close(qs) ;
-	 mq_close(qr) ;
-         mq_unlink(qr_name) ;
-	 return -1;
+     ret = mq_send(qs, (char *)pr, sizeof(struct message), 0);
+     if (ret < 0)
+     {
+          perror("mq_send: ");
+          mq_close(qs);
+          mq_close(qr);
+          mq_unlink(qr_name);
+          return -1;
      }
 
      // receive response
-     ret = mq_receive(qr, (char *)pr, sizeof(struct message), &prio) ;
-     if (ret < 0) {
-	 perror("mq_receive: ") ;
-	 mq_close(qs) ;
-	 mq_close(qr) ;
-         mq_unlink(qr_name) ;
-	 return -1;
+     ret = mq_receive(qr, (char *)pr, sizeof(struct message), &prio);
+     if (ret < 0)
+     {
+          perror("mq_receive: ");
+          mq_close(qs);
+          mq_close(qr);
+          mq_unlink(qr_name);
+          return -1;
      }
 
      // close queues
      ret = mq_close(qs);
-     if (ret < 0) {
-	 perror("mq_close: ") ;
+     if (ret < 0)
+     {
+          perror("mq_close: ");
      }
      ret = mq_close(qr);
-     if (ret < 0) {
-	 perror("mq_close: ") ;
+     if (ret < 0)
+     {
+          perror("mq_close: ");
      }
      ret = mq_unlink(qr_name);
-     if (ret < 0) {
-	 perror("mq_unlink: ") ;
+     if (ret < 0)
+     {
+          perror("mq_unlink: ");
      }
 
      // return status
-     return pr->status ;
+     return pr->status;
 }
 
-int d_add ( int *r, int a, int b )
+int d_add(int *r, int a, int b)
 {
      struct message pr;
 
      // init message
-     bzero(&pr, sizeof(struct message)) ;
-     pr.op    = 1 ;
-     pr.a     = a ;
-     pr.b     = b ;
+     bzero(&pr, sizeof(struct message));
+     pr.op = 1;
+     pr.a = a;
+     pr.b = b;
 
      // send request and receive response
-     d_send_receive(&pr) ;
+     d_send_receive(&pr);
 
      // return status
-     *r = pr.value ;
-     return pr.status ;
+     *r = pr.value;
+     return pr.status;
 }
 
-int d_divide ( int *r, int a, int b )
+int d_divide(int *r, int a, int b)
 {
      struct message pr;
 
      // set message
-     bzero(&pr, sizeof(struct message)) ;
-     pr.op    = 2 ;
-     pr.a     = a ;
-     pr.a     = b ;
+     bzero(&pr, sizeof(struct message));
+     pr.op = 2;
+     pr.a = a;
+     pr.a = b;
 
      // send request and receive response
-     d_send_receive(&pr) ;
+     d_send_receive(&pr);
 
      // return status
-     *r = pr.value ;
-     return pr.status ;
+     *r = pr.value;
+     return pr.status;
 }
 
-int d_neg ( int *r, int a )
+int d_neg(int *r, int a)
 {
      struct message pr;
 
      // get message
-     bzero(&pr, sizeof(struct message)) ;
-     pr.op    = 3 ;
-     pr.a     = a ;
+     bzero(&pr, sizeof(struct message));
+     pr.op = 3;
+     pr.a = a;
 
      // send request and receive response
-     d_send_receive(&pr) ;
+     d_send_receive(&pr);
 
      // return value + status
-     *r = pr.value ;
-     return pr.status ;
+     *r = pr.value;
+     return pr.status;
 }
-

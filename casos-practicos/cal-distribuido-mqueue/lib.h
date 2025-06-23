@@ -22,18 +22,17 @@
 #ifndef LIB_H
 #define LIB_H
 
-  #include <string.h>
-  #include <stdlib.h>
-  #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-  // Sumar: *r = a + b Y devuelve 0
-  int add ( int *r, int a, int b ) ;
+// Sumar: *r = a + b Y devuelve 0
+int add(int *r, int a, int b);
 
-  // Divide dos números enteros: *r = a + b Y devuele (-1 si b==0 / 0 si b!=0)
-  int divide ( int *r, int a, int b ) ;
+// Divide dos números enteros: *r = a + b Y devuele (-1 si b==0 / 0 si b!=0)
+int divide(int *r, int a, int b);
 
-  // Cambio de signo: *r = -a Y devuelve 0
-  int neg ( int *r, int a ) ;
+// Cambio de signo: *r = -a Y devuelve 0
+int neg(int *r, int a);
 
 #endif
-

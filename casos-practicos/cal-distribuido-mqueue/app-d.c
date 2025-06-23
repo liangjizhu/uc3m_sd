@@ -19,30 +19,27 @@
  *
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "lib-client.h"
 
-
-int main ( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-    int   N1 = 20 ;
-    int   N2 = 10 ;
-    int   val, ret ;
+    int N1 = 20;
+    int N2 = 10;
+    int val, ret;
 
     // add
-    ret = d_add(&val, N1, N2) ;
-    printf("%d = add(%d, %d, %d)\n", ret, val, N1, N2) ;
+    ret = d_add(&val, N1, N2);
+    printf("%d = add(%d, %d, %d)\n", ret, val, N1, N2);
 
     // sub
-    ret = d_divide(&val, N1, N2) ;
-    printf("%d = divide(%d, %d, %d)\n", ret, val, N1, N2) ;
+    ret = d_divide(&val, N1, N2);
+    printf("%d = divide(%d, %d, %d)\n", ret, val, N1, N2);
 
     // neg
-    ret = d_neg(&val, N2) ;
-    printf("%d = neg(%d, %d)\n", ret, val, N2) ;
+    ret = d_neg(&val, N2);
+    printf("%d = neg(%d, %d)\n", ret, val, N2);
 
-    return 0 ;
+    return 0;
 }
-

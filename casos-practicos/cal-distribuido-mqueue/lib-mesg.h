@@ -22,21 +22,19 @@
 #ifndef LIB_MSG_H
 #define LIB_MSG_H
 
-   #define MAX 256
+#define MAX 256
 
-   //  message = op + q_name + (a, b) + (a, b) + (a)
-   struct message 
-   {
-      // peticion 
-      int    op;
-      char   q_name[MAX];
-      int    a;
-      int    b;
-      // respuesta
-      int    value;
-      char   status;
-   } ;
+//  message = op + q_name + (a, b) + (a, b) + (a)
+struct message
+{
+   // peticion
+   int op;
+   char q_name[MAX];
+   int a;
+   int b;
+   // respuesta
+   int value;
+   char status;
+};
 
 #endif
-
-

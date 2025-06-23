@@ -22,14 +22,13 @@
 #ifndef LIB_CLIENT_H
 #define LIB_CLIENT_H
 
-   // Sumar dos números enteros.
-   int d_add ( int *r, int a, int b ) ;
+// Sumar dos números enteros.
+int d_add(int *r, int a, int b);
 
-   // Divide dos números enteros.
-   int d_divide ( int *r, int a, int b ) ;
+// Divide dos números enteros.
+int d_divide(int *r, int a, int b);
 
-   // Cambio de signo de un número entero.
-   int d_neg ( int *r, int a ) ;
+// Cambio de signo de un número entero.
+int d_neg(int *r, int a);
 
 #endif
-

@@ -19,118 +19,120 @@
  *
  */
 
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "lib.h"
 
-
 /*
  * Internal data
  */
 
-int    a_neltos = 0 ;
-int  **a_values ; // = [ [0…N1], [0…N2], ... [0…NN] ] ;
-char **a_keys   ; // = [ "key1", "key2", ... "keyN" ] ;
-
+int a_neltos = 0;
+int **a_values; // = [ [0…N1], [0…N2], ... [0…NN] ] ;
+char **a_keys;  // = [ "key1", "key2", ... "keyN" ] ;
 
 /*
  * Internal functions
  */
 
-int buscar ( char *nombre )
+int buscar(char *nombre)
 {
-     int index = -1 ;
+    int index = -1;
 
-     for (int i=0; i<a_neltos; i++) 
-     {
-            if (!strcmp(a_keys[i], nombre)) { 
-                return i ;
-            }
-     }
+    for (int i = 0; i < a_neltos; i++)
+    {
+        if (!strcmp(a_keys[i], nombre))
+        {
+            return i;
+        }
+    }
 
-     return index;
+    return index;
 }
 
-int insertar ( char *nombre, int N )
+int insertar(char *nombre, int N)
 {
-     void *ret ;
+    void *ret;
 
-     // add new vector => [ [0…N1], [0…N2], ... [0…NN] ]
-     ret = realloc(a_values, (a_neltos+1)*sizeof(int *)) ;
-     if (NULL == ret) {
-         perror("realloc: ") ;
-         return -1 ; // en caso de error => -1
-     }
-     a_values = (int **)ret ;
+    // add new vector => [ [0…N1], [0…N2], ... [0…NN] ]
+    ret = realloc(a_values, (a_neltos + 1) * sizeof(int *));
+    if (NULL == ret)
+    {
+        perror("realloc: ");
+        return -1; // en caso de error => -1
+    }
+    a_values = (int **)ret;
 
-     // new vector
-     a_values[a_neltos] = malloc(N*sizeof(int)) ;
-     if (a_values[a_neltos] == NULL) {
-         perror("malloc: ") ;
-         return -1 ; // en caso de error => -1
-     }
+    // new vector
+    a_values[a_neltos] = malloc(N * sizeof(int));
+    if (a_values[a_neltos] == NULL)
+    {
+        perror("malloc: ");
+        return -1; // en caso de error => -1
+    }
 
-     // add new key    => [ "key1", "key2", ... "keyN" ]
-     ret = realloc(a_keys, (a_neltos+1)*sizeof(char *)) ;
-     if (NULL == ret) {
-         perror("realloc: ") ;
-         return -1 ; // en caso de error => -1
-     }
-     a_keys = (char **)ret ;
+    // add new key    => [ "key1", "key2", ... "keyN" ]
+    ret = realloc(a_keys, (a_neltos + 1) * sizeof(char *));
+    if (NULL == ret)
+    {
+        perror("realloc: ");
+        return -1; // en caso de error => -1
+    }
+    a_keys = (char **)ret;
 
-     // new key
-     a_keys[a_neltos] = strdup(nombre) ;
-     if (a_keys[a_neltos] == NULL) {
-         perror("malloc: ") ;
-         return -1 ; // en caso de error => -1
-     }
+    // new key
+    a_keys[a_neltos] = strdup(nombre);
+    if (a_keys[a_neltos] == NULL)
+    {
+        perror("malloc: ");
+        return -1; // en caso de error => -1
+    }
 
-     a_neltos++ ;
-     return 1 ; // todo bien => devolver 1
+    a_neltos++;
+    return 1; // todo bien => devolver 1
 }
-
 
 /*
  * API
  */
 
 // Inicializar un array distribuido de N números enteros.
-int init (char  *nombre,  int  N)
+int init(char *nombre, int N)
 {
-     int index = buscar(nombre) ;
-     if (index != -1) return 0 ;   // Si array ya esté creado => devolver 0
+    int index = buscar(nombre);
+    if (index != -1)
+        return 0; // Si array ya esté creado => devolver 0
 
-     index = insertar(nombre, N) ;
-     if (index == -1) return -1;  // en caso de error => -1
+    index = insertar(nombre, N);
+    if (index == -1)
+        return -1; // en caso de error => -1
 
-     return 1 ; // el array se ha creado por primera vez => devolver 1
+    return 1; // el array se ha creado por primera vez => devolver 1
 }
-
-
 
 // Inserta el valor en la posición i del array nombre.
-int set (char *nombre, int i, int valor)
+int set(char *nombre, int i, int valor)
 {
-     int index = buscar(nombre) ;
-     if (index == -1) {
-	 return -1 ;   // Si error => devolver -1
-     }
+    int index = buscar(nombre);
+    if (index == -1)
+    {
+        return -1; // Si error => devolver -1
+    }
 
-     a_values[index][i] = valor ;
-     return 1;
+    a_values[index][i] = valor;
+    return 1;
 }
 
-// Recuperar el valor del elemento i del array nombre. 
-int get (char*nombre, int i, int *valor)
+// Recuperar el valor del elemento i del array nombre.
+int get(char *nombre, int i, int *valor)
 {
-     int index = buscar(nombre) ;
-     if (index == -1) {
-	 return -1 ;   // Si error => devolver -1
-     }
+    int index = buscar(nombre);
+    if (index == -1)
+    {
+        return -1; // Si error => devolver -1
+    }
 
-     *valor = a_values[index][i] ;
-     return 1;
+    *valor = a_values[index][i];
+    return 1;
 }
-

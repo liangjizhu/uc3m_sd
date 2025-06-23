@@ -22,14 +22,13 @@
 #ifndef LIB_CLIENT_H
 #define LIB_CLIENT_H
 
-   // Inicializar un array distribuido de N números enteros.
-   int d_init ( char  *nombre,  int  N ) ;
+// Inicializar un array distribuido de N números enteros.
+int d_init(char *nombre, int N);
 
-   // Inserta el valor en la posición i del array nombre.
-   int d_set  ( char *nombre, int i, int valor ) ;
+// Inserta el valor en la posición i del array nombre.
+int d_set(char *nombre, int i, int valor);
 
-   // Recuperar el valor del elemento i del array nombre. 
-   int d_get  ( char *nombre, int i, int *valor ) ;
+// Recuperar el valor del elemento i del array nombre.
+int d_get(char *nombre, int i, int *valor);
 
 #endif
-

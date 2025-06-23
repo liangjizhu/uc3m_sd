@@ -27,7 +27,7 @@
 #include <signal.h>
 
 #include "lib.h"
-#include "lib-mesg.h" w
+#include "lib-mesg.h"
 
 void tratar_peticion(struct message *pr)
 {
